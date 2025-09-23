@@ -24,12 +24,13 @@ def get_song_html(url):
     soup = BeautifulSoup(response.content, "html.parser")
 
     lyrics_div = soup.find("div", {"id": "lyrics"})
-    return lyrics_div.get_text(separator=" ", strip=True) if lyrics_div else None
+    return lyrics_div.get_text(separator="\n", strip=True) if lyrics_div else None
 
 def normalize_song(song):
     song = unidecode(song.lower())
     song = re.sub(r"[^\w\s]", " ", song)
-    song = re.sub(r"\s+", " ", song).strip()
+    song = re.sub(r"[ \t]+", " ", song)
+    song = re.sub(r"\n\s*", "\n", song).strip()
     return song
 
 # lista expandida de artistas e musicas
@@ -121,7 +122,7 @@ def save_with_checkpoint(singers_songs, filename="corpus.txt", checkpoint_file="
                 
                 if song_lyrics:
                     normalized = normalize_song(song_lyrics)
-                    f.write(f"{singer} - {song}\n")
+                    # f.write(f"{singer} - {song}\n")
                     f.write(f"{normalized}\n\n")
                     f.flush()  # força escrita imediata
                     

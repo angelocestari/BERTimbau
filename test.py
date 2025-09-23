@@ -109,7 +109,8 @@ def normalize_text(text):
     
     text = unidecode(text.lower())
     text = re.sub(r"[^\w\s]", " ", text)
-    text = re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"\n\s+", "\n", text).strip()
     return text
 
 def get_song_name_from_url(song_url):
@@ -152,7 +153,7 @@ def process_artist(artist_url, output_file="corpus.txt"):
                 # normaliza o texto
                 normalized_lyrics = normalize_text(lyrics)
                 
-                f.write(f"{artist_name} - {song_name}\n")
+                # f.write(f"{artist_name} - {song_name}\n")
                 f.write(f"{normalized_lyrics}\n\n")
                 f.flush()
                 
@@ -170,5 +171,5 @@ def process_artist(artist_url, output_file="corpus.txt"):
 
 
 print("iniciando coleta de letras musicais...")
-process_artist("https://www.vagalume.com.br/14-bis", "corpus_teste2.txt")
+process_artist("https://www.vagalume.com.br/titas", "corpus_teste2.txt")
 print("coleta concluida! Corpus salvo em 'corpus.txt'")
